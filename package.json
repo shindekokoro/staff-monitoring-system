@@ -1,0 +1,38 @@
+{
+  "name": "staff-monitoring-system",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shindekokoro/staff-monitoring-system.git"
+  },
+  "keywords": [
+    "node",
+    "mysql",
+    "cli",
+    "business",
+    "departments",
+    "roles",
+    "employees",
+    "cms",
+    "sms",
+    "monitoring",
+    "management",
+    "content",
+    "staff"
+  ],
+  "author": "Brian Whisler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shindekokoro/staff-monitoring-system/issues"
+  },
+  "homepage": "https://github.com/shindekokoro/staff-monitoring-system#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.6.0"
+  }
+}
