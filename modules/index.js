@@ -14,13 +14,13 @@ async function init() {
             // Actions Switch
             switch (answers.action) {
                 case 'viewDepartments':
-                    actions.viewDepartment();
+                    actions.view('department');
                     break;
                 case 'viewRoles':
-                    actions.viewRole();
+                    actions.view('role');
                     break;
                 case 'viewEmployees':
-                    actions.viewEmployee();
+                    actions.view('employee');
                     break;
                 case 'addDepartment':
                     actions.addDepartment(answers.departmentName);
