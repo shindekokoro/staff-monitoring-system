@@ -22,7 +22,8 @@ module.exports = {
                 { name: 'Add a Department', value: 'addDepartment' },
                 { name: 'Add a Role', value: 'addRole' },
                 { name: 'Add an Employee', value: 'addEmployee' },
-                { name: 'Update an Employee Role', value: 'updateRole' }
+                { name: 'Update an Employee Role', value: 'updateRole' },
+                { name: 'Quit', value: 'quit' }
             ],
 
         },
