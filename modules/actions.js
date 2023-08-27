@@ -34,21 +34,21 @@ const getEmployeesList = async () => {
 const addDepartment = (name) => {
     if (!name) { return 'No department name passed.'; }
     let sql = 'INSERT INTO `department` (name) VALUES (?);'
-    database.sqlFunction(sql, name, `${name} added to department table.`, `Unable to add ${name} department to table.`)
-        .catch(error => {
-            if (error.code === 'ER_DUP_ENTRY') {
-                console.warn(`${name} is already a department, try a new name.`);
-            }
-            else {
-                console.error(`${error}`);
-            }
-        });
+    database.sqlFunction(sql, name, `${name} added to department table.`, `Unable to add ${name} department to table.`);
 }
 
 const addRole = (title, salary, department_id) => {
     if (!title) { return 'No role title passed.'; }
     let sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
-    database.sqlFunction(sql, [title, salary, department_id], `${title} added to role table.`, `Unable to add '${title}' department to table.`);
+    database.sqlFunction(sql, [title, salary, department_id], `${title} added to role table.`, `Unable to add '${title}' department to table.`)
+        .catch(error => {
+            if (error.code === 'ER_DUP_ENTRY') {
+                console.warn(`${title} is already a role in your selected department. Try a again, or try a new role.`);
+            }
+            else {
+                console.error(`${error}`);
+            }
+        });;
 }
 
 const addEmployee = (first_name, last_name, role_id, manager_id) => {
