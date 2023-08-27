@@ -5,6 +5,21 @@ const validateName = (input) => {
     return isName || 'Make sure to put in a valid name.'
 }
 
+const validateDepartment = async (input) => {
+    let validInput = validateName(input)
+    if (validInput !== true) {
+        return validInput;
+    }
+    let departmentList = await actions.getDepartmentsList();
+    let notInList = departmentList.filter(department => department.name.toLowerCase() === input.toLowerCase());
+
+    if (notInList.length) {
+        return `${input} appears to already be in your department list. Try a new name.`;
+    } else {
+        return true;
+    }
+}
+
 const validateSalary = (input) => {
     let salary = parseFloat(input).toFixed(2)
     let isValid = salary !== 'NaN'
@@ -34,7 +49,7 @@ const questions = [
         type: 'input',
         name: 'departmentName',
         message: 'What is the name of the department?',
-        validate: validateName
+        validate: validateDepartment
     },
     // Add Role
     {
