@@ -16,6 +16,8 @@ Staff Monitoring System (S.M.S.) Is an application to help companies manage empl
 Type in terminal:
 1. `git clone https://github.com/shindekokoro/staff-monitoring-system.git`
 2. `npm install`
+3. Make sure MySQL server and database accessible
+   - `CREATE DATABASE IF NOT EXISTS sms`
 
 ## Usage
 1. Make any changes to config.json as needed
