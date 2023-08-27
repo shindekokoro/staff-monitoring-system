@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS `role`(
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `title` VARCHAR(30),
     `salary` DECIMAL(13, 2),
-    `department_id` INT REFERENCES `department`(`id`)
+    `department_id` INT REFERENCES `department`(`id`),
+    UNIQUE KEY `title_department` (`title`, `department_id`)
 );
 CREATE TABLE IF NOT EXISTS `employee`(
     `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
