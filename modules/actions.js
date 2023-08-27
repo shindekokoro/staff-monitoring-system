@@ -1,9 +1,14 @@
 const database = require('./database');
 
+// Format a string so the first letter of each word is capitalized.
 const formatName = (input) => {
-    return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+    let newString = input.split(' ');
+    for (let i = 0; i < newString.length; i++) {
+        newString[i] = newString[i].charAt(0).toUpperCase() + newString[i].slice(1).toLowerCase();
+    }
+    return newString.join(' ');
 }
-
+// View specified table and if there is an ID the specific entry.
 const view = (table, id) => {
     let sql = `SELECT * FROM \`${table}\`${id ? 'WHERE `id` = ?' : ''}`;
     return database.sqlFunction(
@@ -13,7 +18,7 @@ const view = (table, id) => {
         `Unable to pull '${table}' records.`
     );
 }
-
+// Return list of all Departments and their IDs
 const getDepartmentsList = async () => {
     const departments = await view('department');
     const departmentList = departments.map(department => {
@@ -21,6 +26,7 @@ const getDepartmentsList = async () => {
     })
     return departmentList;
 }
+// Return list of all Roles and their IDs
 const getRolesList = async () => {
     const roles = await view('role');
     const roleList = roles.map(role => {
@@ -28,7 +34,7 @@ const getRolesList = async () => {
     })
     return roleList;
 }
-
+// Return list of Employees and their IDs
 const getEmployeesList = async () => {
     const employees = await view('employee');
     if (!employees.length) {
@@ -39,7 +45,7 @@ const getEmployeesList = async () => {
     })
     return employeeList;
 }
-
+// Add NEW department to department table
 const addDepartment = (name) => {
     if (!name) { return 'No department name passed.'; }
     let sql = 'INSERT INTO `department` (name) VALUES (?);'
@@ -50,7 +56,7 @@ const addDepartment = (name) => {
         `Unable to add ${name} department to table.`
     );
 }
-
+// Add NEW role to role table, will catch error if title and department_id already exist
 const addRole = (title, salary, department_id) => {
     if (!title) { return 'No role title passed.'; }
     let sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
@@ -69,7 +75,7 @@ const addRole = (title, salary, department_id) => {
             }
         });
 }
-
+// Add employee to employee table
 const addEmployee = (first_name, last_name, role_id, manager_id) => {
     let sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
     database.sqlFunction(
@@ -79,7 +85,7 @@ const addEmployee = (first_name, last_name, role_id, manager_id) => {
         `Unable to update employee.`
     );
 }
-
+// Update role of employee.
 const updateEmployeeRole = (employee_id, role_id) => {
     if (!employee_id || !role_id) { return 'Needed IDs not provided, please try again'; }
     let sql = 'UPDATE `employee` SET `role_id` = ? WHERE `id` = ?';

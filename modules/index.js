@@ -9,6 +9,7 @@ const actions = require('./actions');
 
 colors.enable()
 
+// Init function, starts inquirer question prompt.
 async function init() {
     // Display Name of App/LOGO
     console.log(appLogo);

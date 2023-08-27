@@ -6,7 +6,7 @@ const path = require('path');
 
 colors.enable();
 
-const seedSql = fs.readFileSync(path.join(__dirname, '../static/database.sql')).toString();
+// Create connection to SQL DB
 const smsDB = mysql.createConnection({
     host: config.db.host,
     port: config.db.port,
@@ -15,11 +15,12 @@ const smsDB = mysql.createConnection({
     database: config.db.database,
     multipleStatements: true
 });
-
+// Declare SeedSQL data in case database is empty.
+const seedSql = fs.readFileSync(path.join(__dirname, '../static/database.sql')).toString();
 function startDB() {
     sqlFunction(seedSql, null, 'Database tables loaded/created successfully', 'Unable to load database tables.');
 }
-
+// Custom SQL Function, takes SQL, it's values along with logging for success and errors
 const sqlFunction = async (sql, values, logSuccess, logError) => {
     return new Promise((resolve, reject) => {
         config.logging.enabled ? console.log('The query is: ' + sql) : '';

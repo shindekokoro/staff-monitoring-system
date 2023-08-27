@@ -1,12 +1,13 @@
 const actions = require('./actions');
 
-const validateName = (input) => {
+// Validate Entry, ensure that text has been entered as to not have a null entry.
+const validateEntry = (input) => {
     var isName = input !== ''
     return isName || 'Make sure to put in a valid name.'
 }
-
+// Department Validation, ensure that input is present and not already a department.
 const validateDepartment = async (input) => {
-    let validInput = validateName(input)
+    let validInput = validateEntry(input)
     if (validInput !== true) {
         return validInput;
     }
@@ -19,13 +20,13 @@ const validateDepartment = async (input) => {
         return true;
     }
 }
-
+// Salary Validation, ensure that value is a number.
 const validateSalary = (input) => {
     let salary = parseFloat(input).toFixed(2)
     let isValid = salary !== 'NaN'
     return isValid || 'Make sure to enter in a number.'
 }
-
+// Questions for Inquirer
 const questions = [
     {
         type: 'list',
@@ -57,7 +58,7 @@ const questions = [
         type: 'input',
         name: 'roleName',
         message: 'What is the name of the role?',
-        validate: validateName
+        validate: validateEntry
     },
     {
         when: (answer) => answer.action === 'addRole',
@@ -79,14 +80,14 @@ const questions = [
         type: 'input',
         name: 'first_name',
         message: `What is the employee's first name?`,
-        validate: validateName
+        validate: validateEntry
     },
     {
         when: (answer) => answer.action === 'addEmployee',
         type: 'input',
         name: 'last_name',
         message: (answer) => `What is ${answer.first_name}'s surname?`,
-        validate: validateName
+        validate: validateEntry
     },
     {
         when: (answer) => answer.action === 'addEmployee',
