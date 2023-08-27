@@ -2,61 +2,66 @@ const database = require('./database');
 
 const view = (table, id) => {
     let sql = `SELECT * FROM \`${table}\`${id ? 'WHERE `id` = ?' : ''}`;
-    database.sqlFunction(sql, id, `Successfully queried ${table}`, `Unable to pull ${table} records.`)
-        .then(data => {
-            console.table(data, ['id', 'name']);
-        });
+    return database.sqlFunction(sql, id, `Successfully queried ${table}`, `Unable to pull '${table}' records.`)
 }
 
-// // Pull department records, will pull all if not id supplied
-// const viewDepartment = (id) => {
-//     let sql = `SELECT * FROM \`department\`${id ? 'WHERE `id` = ?' : ''}`;
-//     database.sqlFunction(sql, id, '', 'Unable to pull department records.')
-//         .then(data => {
-//             console.table(data, ['id', 'name']);
-//             return `formatted table showing department names and department ids`
-//         });
-// }
-// // Pull role records, will pull all if not id supplied
-// const viewRole = (id) => {
-//     let sql = 'SELECT * FROM `roles` WHERE `id` = ?;';
-//     database.sqlFunction(sql, id, '', 'Unable to pull role records.');
-//     return `formatted table showing department names and department ids`
-// }
-// // Pull employee records, will pull all if not id supplied
-// const viewEmployee = (id) => {
-//     let sql = 'SELECT * FROM `employee` WHERE `id` = ?;';
-//     database.sqlFunction(sql, id, '', 'Unable to pull employee records.');
-//     return `formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to`
-// }
+const getDepartmentsList = async () => {
+    const departments = await view('department');
+    const departmentList = departments.map(department => {
+        return { name: department.name, value: department.id }
+    })
+    return departmentList;
+}
+const getRolesList = async () => {
+    const roles = await view('role');
+    const roleList = roles.map(role => {
+        return { name: role.title, value: role.id }
+    })
+    return roleList;
+}
+
+const getEmployeesList = async () => {
+    const employees = await view('employee');
+    if (!employees.length) {
+        return [{ name: 'No Employees found, add some', value: -1 }];
+    }
+    const employeeList = employees.map(employee => {
+        return { name: `${employee.first_name} ${employee.last_name}`, value: employee.id }
+    })
+    return employeeList;
+}
 
 const addDepartment = (name) => {
     if (!name) { return 'No department name passed.'; }
     let sql = 'INSERT INTO `department` (name) VALUES (?);'
-    database.sqlFunction(sql, name, '', `Unable to add ${name} department to table`)
-        .then(data => {
-            return `${name} added to department table.`
-        })
+    database.sqlFunction(sql, name, `${name} added to department table.`, `Unable to add ${name} department to table.`)
         .catch(error => {
             if (error.code === 'ER_DUP_ENTRY') {
-                console.log(`${name} is already a department, try a new name.`);
+                console.warn(`${name} is already a department, try a new name.`);
             }
             else {
-                console.error(error);
+                console.error(`${error}`);
             }
         });
 }
 
-const addRole = () => {
-
+const addRole = (title, salary, department_id) => {
+    if (!title) { return 'No role title passed.'; }
+    let sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
+    database.sqlFunction(sql, [title, salary, department_id], `${title} added to role table.`, `Unable to add '${title}' department to table.`);
 }
 
-const addEmployee = () => {
-
+const addEmployee = (first_name, last_name, role_id, manager_id) => {
+    if (!first_name) { return 'No first name passed.'; }
+    if (!last_name) { return 'No last name passed.'; }
+    let sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
+    database.sqlFunction(sql, [first_name, last_name, role_id, manager_id], `${first_name} ${last_name} added to employee table.`, `Unable to update employee.`);
 }
 
-const updateRole = () => {
-
+const updateEmployeeRole = (employee_id, role_id) => {
+    if (!employee_id || !role_id) { return 'Needed IDs not provided, please try again'; }
+    let sql = 'UPDATE `employee` SET `role_id` = ? WHERE `id` = ?';
+    database.sqlFunction(sql, [role_id, employee_id], `Successfully updated employee's role.`, `Unable to update employee`)
 }
 
-module.exports = { view, addDepartment, addRole, addEmployee, updateRole }
+module.exports = { view, getDepartmentsList, getRolesList, getEmployeesList, addDepartment, addRole, addEmployee, updateEmployeeRole }
