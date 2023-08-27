@@ -47,10 +47,10 @@ module.exports = {
             name: 'salary',
             message: 'What is the role\'s salary?'
         },
-        {
+        { // TODO: Query department list and let user select
             when: (answer) => answer.action === 'addRole',
             type: 'input',
-            name: 'department',
+            name: 'departmentID',
             message: (answer) => `What department is ${answer.roleName} in?`
         },
         // Add Employee
