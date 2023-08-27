@@ -1,0 +1,15 @@
+{
+    "web": {
+        "port": 8080
+    },
+    "db": {
+        "host": "localhost",
+        "port": 3306,
+        "username": "root",
+        "password": "password",
+        "database": "sms"
+    },
+    "logging": {
+        "enabled": false
+    }
+}
