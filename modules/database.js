@@ -29,7 +29,7 @@ const sqlFunction = async (sql, values, logSuccess, logError) => {
                 console.error(`\n${logError}`.red);
                 reject(error)
             }
-            // console.log(logSuccess);
+            config.logging.enabled ? console.log(logSuccess) : '';
             return resolve(result)
         });
     });
