@@ -45,6 +45,11 @@ const getEmployeesList = async () => {
     })
     return employeeList;
 }
+const getManagerList = async () => {
+    let managerList = await getEmployeesList();
+    managerList.push({ name: 'No Manager', value: null })
+    return managerList;
+}
 // Add NEW department to department table
 const addDepartment = (name) => {
     if (!name) { return 'No department name passed.'; }
@@ -76,7 +81,8 @@ const addRole = (title, salary, department_id) => {
         });
 }
 // Add employee to employee table
-const addEmployee = (first_name, last_name, role_id, manager_id) => {
+const addEmployee = (first_name, last_name, role_id, manager) => {
+    let manager_id = manager === '' ? null : manager;
     let sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
     database.sqlFunction(
         sql,
@@ -97,4 +103,4 @@ const updateEmployeeRole = (employee_id, role_id) => {
     );
 }
 
-module.exports = { view, getDepartmentsList, getRolesList, getEmployeesList, addDepartment, addRole, addEmployee, updateEmployeeRole }
+module.exports = { view, getDepartmentsList, getRolesList, getEmployeesList, getManagerList, addDepartment, addRole, addEmployee, updateEmployeeRole }

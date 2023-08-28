@@ -2,7 +2,7 @@ const actions = require('./actions');
 
 // Validate Entry, ensure that text has been entered as to not have a null entry.
 const validateEntry = (input) => {
-    var isName = input !== ''
+    var isName = input.trim() !== ''
     return isName || 'Make sure to put in a valid name.'
 }
 // Department Validation, ensure that input is present and not already a department.
@@ -98,9 +98,10 @@ const questions = [
     },
     {
         when: (answer) => answer.action === 'addEmployee',
-        type: 'input',
-        name: 'manager',
-        message: `What is their manager's name?`
+        type: 'list',
+        name: 'manager_id',
+        message: `What is their manager's name?`,
+        choices: actions.getManagerList
     },
     // Update Role
     {
