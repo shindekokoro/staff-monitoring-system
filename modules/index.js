@@ -52,9 +52,8 @@ async function init() {
                     let employeesTable = viewEmployees.map((employee) => {
                         let currentRole = employeeRoles.find(role => role.id === employee.role_id);
                         let currentManager = viewEmployees.find((manager) => {
-                            console.log(manager);
-                            if (manager.manager_id === null) { return null }
-                            if (manager.id === employee.id) { return manager }
+                            if (employee.manager_id === manager.id) { return manager }
+                            if (employee.manager_id === null) { return null }
                         });
                         let managerName = currentManager ? currentManager.first_name + ' ' + currentManager.last_name : 'none';
                         return {
@@ -80,6 +79,10 @@ async function init() {
                     break;
                 case 'updateRole':
                     actions.updateEmployeeRole(answers.employee_id, answers.role_id);
+                    break;
+                case 'updateManager':
+                    console.log(actions);
+                    actions.updateEmployeeManager(answers.employee_id, answers.manager_id);
                     break;
                 case 'quit':
                     console.log('User has requested to quit application.'.blue);

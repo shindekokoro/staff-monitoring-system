@@ -102,5 +102,17 @@ const updateEmployeeRole = (employee_id, role_id) => {
         `Unable to update employee`
     );
 }
+// Update manager of employee.
+const updateEmployeeManager = (employee_id, manager_id) => {
+    if (!employee_id) { return 'Needed IDs not provided, please try again'; }
+    console.log(employee_id + manager_id);
+    let sql = 'UPDATE `employee` SET `manager_id` = ? WHERE `id` = ?';
+    database.sqlFunction(
+        sql,
+        [manager_id, employee_id],
+        `Successfully updated employee's role.`,
+        `Unable to update employee`
+    );
+}
 
-module.exports = { view, getDepartmentsList, getRolesList, getEmployeesList, getManagerList, addDepartment, addRole, addEmployee, updateEmployeeRole }
+module.exports = { view, getDepartmentsList, getRolesList, getEmployeesList, getManagerList, addDepartment, addRole, addEmployee, updateEmployeeRole, updateEmployeeManager }

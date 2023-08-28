@@ -40,6 +40,7 @@ const questions = [
             { name: 'Add a Role', value: 'addRole' },
             { name: 'Add an Employee', value: 'addEmployee' },
             { name: 'Update an Employee Role', value: 'updateRole' },
+            { name: 'Update an Employee Manager', value: 'updateManager' },
             { name: 'Quit', value: 'quit' }
         ],
 
@@ -117,6 +118,21 @@ const questions = [
         name: 'role_id',
         message: 'Choose from the list to select an updated role:',
         choices: actions.getRolesList
+    },
+    // Update Manager
+    {
+        when: (answer) => answer.action === 'updateManager',
+        type: 'list',
+        name: 'employee_id',
+        message: 'Choose from the list to select an employee to update their role:',
+        choices: actions.getEmployeesList
+    },
+    {
+        when: (answer) => answer.action === 'updateManager',
+        type: 'list',
+        name: 'manager_id',
+        message: 'Choose from the list to select an updated role:',
+        choices: actions.getManagerList
     }
 ]
 
