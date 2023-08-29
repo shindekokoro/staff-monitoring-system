@@ -60,7 +60,7 @@ async function init() {
                             'ID': employee.id,
                             'First Name': employee.first_name,
                             'Last Name': employee.last_name,
-                            'Department': currentRole.title,
+                            'Department Role': currentRole.title,
                             'Manager': managerName
                         }
                     })
