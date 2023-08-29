@@ -1,4 +1,4 @@
-const database = require('./database');
+const sqlFunction = require('./database').sqlFunction;
 
 // Format a string so the first letter of each word is capitalized.
 const formatName = (input) => {
@@ -11,50 +11,48 @@ const formatName = (input) => {
 // View specified table and if there is an ID the specific entry.
 const viewTable = (table, id) => {
     let sql = `SELECT * FROM \`${table}\`${id ? 'WHERE `id` = ?' : ''}`;
-    return database.sqlFunction(
+    return sqlFunction(
         sql,
         id,
         `Successfully queried ${table}`,
         `Unable to pull '${table}' records.`
     );
 }
-// Return list of all Departments and their IDs
-const getDepartmentsList = async () => {
-    const departments = await viewTable('department');
-    const departmentList = departments.map(department => {
-        return { name: department.name, value: department.id }
-    })
-    return departmentList;
-}
-// Return list of all Roles and their IDs
-const getRolesList = async () => {
-    const roles = await viewTable('role');
-    const roleList = roles.map(role => {
-        return { name: role.title, value: role.id }
-    })
-    return roleList;
-}
-// Return list of Employees and their IDs
-const getEmployeesList = async () => {
-    const employees = await viewTable('employee');
-    if (!employees.length) {
-        return [{ name: 'No Employees found, add some', value: -1 }];
+// Return a list of items and their IDs based on the specified table and table map.
+const getListWithIDs = async (table, tableMap, nullMessage) => {
+    const staff = await viewTable(table);
+    if (!staff.length) {
+        return [{ name: nullMessage, value: -1 }];
     }
-    const employeeList = employees.map(employee => {
-        return { name: `${employee.first_name} ${employee.last_name}`, value: employee.id }
-    })
-    return employeeList;
-}
+    return items.map(tableMap);
+};
+
+const getDepartmentsList = () => {
+    const tableMap = department => ({ name: department.name, value: department.id });
+    return getListWithIDs('department', tableMap, 'No departments, add one first.');
+};
+
+const getRolesList = () => {
+    const tableMap = role => ({ name: role.title, value: role.id });
+    return getListWithIDs('role', tableMap, 'No department roles, add some.');
+};
+
+const getEmployeesList = () => {
+    const tableMap = employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id });
+    return getListWithIDs('employee', tableMap, 'No employees found, add some');
+};
+
 const getManagerList = async () => {
-    let managerList = await getEmployeesList();
-    managerList.push({ name: 'No Manager', value: null })
+    const managerList = await getEmployeesList();
+    managerList.push({ name: 'No Manager', value: null });
     return managerList;
-}
+};
+
 // Add NEW department to department table
 const addDepartment = (name) => {
     if (!name) { return 'No department name passed.'; }
     let sql = 'INSERT INTO `department` (name) VALUES (?);'
-    database.sqlFunction(
+    sqlFunction(
         sql,
         formatName(name),
         `${name} added to department table.`,
@@ -65,7 +63,7 @@ const addDepartment = (name) => {
 const addRole = (title, salary, department_id) => {
     if (!title) { return 'No role title passed.'; }
     let sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
-    database.sqlFunction(
+    sqlFunction(
         sql,
         [formatName(title), salary, department_id],
         `${title} added to role table.`,
@@ -84,7 +82,7 @@ const addRole = (title, salary, department_id) => {
 const addEmployee = (first_name, last_name, role_id, manager) => {
     let manager_id = manager === '' ? null : manager;
     let sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
-    database.sqlFunction(
+    sqlFunction(
         sql,
         [formatName(first_name), formatName(last_name), role_id, manager_id],
         `${first_name} ${last_name} added to employee table.`,
@@ -95,7 +93,7 @@ const addEmployee = (first_name, last_name, role_id, manager) => {
 const updateEmployeeRole = (employee_id, role_id) => {
     if (!employee_id || !role_id) { return 'Needed IDs not provided, please try again'; }
     let sql = 'UPDATE `employee` SET `role_id` = ? WHERE `id` = ?';
-    database.sqlFunction(
+    sqlFunction(
         sql,
         [role_id, employee_id],
         `Successfully updated employee's role.`,
@@ -107,7 +105,7 @@ const updateEmployeeManager = (employee_id, manager_id) => {
     if (!employee_id) { return 'Needed IDs not provided, please try again'; }
     console.log(employee_id + manager_id);
     let sql = 'UPDATE `employee` SET `manager_id` = ? WHERE `id` = ?';
-    database.sqlFunction(
+    sqlFunction(
         sql,
         [manager_id, employee_id],
         `Successfully updated employee's role.`,
