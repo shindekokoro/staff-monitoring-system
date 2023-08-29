@@ -9,7 +9,7 @@ const formatName = (input) => {
     return newString.join(' ');
 }
 // View specified table and if there is an ID the specific entry.
-const view = (table, id) => {
+const viewTable = (table, id) => {
     let sql = `SELECT * FROM \`${table}\`${id ? 'WHERE `id` = ?' : ''}`;
     return database.sqlFunction(
         sql,
@@ -20,7 +20,7 @@ const view = (table, id) => {
 }
 // Return list of all Departments and their IDs
 const getDepartmentsList = async () => {
-    const departments = await view('department');
+    const departments = await viewTable('department');
     const departmentList = departments.map(department => {
         return { name: department.name, value: department.id }
     })
@@ -28,7 +28,7 @@ const getDepartmentsList = async () => {
 }
 // Return list of all Roles and their IDs
 const getRolesList = async () => {
-    const roles = await view('role');
+    const roles = await viewTable('role');
     const roleList = roles.map(role => {
         return { name: role.title, value: role.id }
     })
@@ -36,7 +36,7 @@ const getRolesList = async () => {
 }
 // Return list of Employees and their IDs
 const getEmployeesList = async () => {
-    const employees = await view('employee');
+    const employees = await viewTable('employee');
     if (!employees.length) {
         return [{ name: 'No Employees found, add some', value: -1 }];
     }
@@ -115,4 +115,4 @@ const updateEmployeeManager = (employee_id, manager_id) => {
     );
 }
 
-module.exports = { view, getDepartmentsList, getRolesList, getEmployeesList, getManagerList, addDepartment, addRole, addEmployee, updateEmployeeRole, updateEmployeeManager }
+module.exports = { viewTable, getDepartmentsList, getRolesList, getEmployeesList, getManagerList, addDepartment, addRole, addEmployee, updateEmployeeRole, updateEmployeeManager }

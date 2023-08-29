@@ -23,7 +23,7 @@ async function init() {
             // Actions Switch
             switch (answers.action) {
                 case 'viewDepartments':
-                    let viewDepartments = await actions.view('department');
+                    let viewDepartments = await actions.viewTable('department');
                     let departmentsTable = viewDepartments.map((department) => {
                         return {
                             'ID': department.id,
@@ -33,8 +33,8 @@ async function init() {
                     printTable(departmentsTable)
                     break;
                 case 'viewRoles':
-                    let viewRoles = await actions.view('role');
-                    let roleDepartments = await actions.view('department');
+                    let viewRoles = await actions.viewTable('role');
+                    let roleDepartments = await actions.viewTable('department');
                     let rolesTable = viewRoles.map((role) => {
                         let currentDepartment = roleDepartments.find(department => department.id === role.department_id)
                         return {
@@ -47,8 +47,8 @@ async function init() {
                     printTable(rolesTable)
                     break;
                 case 'viewEmployees':
-                    let viewEmployees = await actions.view('employee');
-                    let employeeRoles = await actions.view('role');
+                    let viewEmployees = await actions.viewTable('employee');
+                    let employeeRoles = await actions.viewTable('role');
                     let employeesTable = viewEmployees.map((employee) => {
                         let currentRole = employeeRoles.find(role => role.id === employee.role_id);
                         let currentManager = viewEmployees.find((manager) => {
