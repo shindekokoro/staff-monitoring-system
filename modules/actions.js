@@ -48,46 +48,54 @@ const getManagerList = async () => {
     return managerList;
 };
 
-// Add NEW department to department table
-const addDepartment = (name) => {
-    if (!name) { return 'No department name passed.'; }
-    let sql = 'INSERT INTO `department` (name) VALUES (?);'
-    sqlFunction(
-        sql,
-        formatName(name),
-        `${name} added to department table.`,
-        `Unable to add ${name} department to table.`
-    );
-}
-// Add NEW role to role table, will catch error if title and department_id already exist
-const addRole = (title, salary, department_id) => {
-    if (!title) { return 'No role title passed.'; }
-    let sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
-    sqlFunction(
-        sql,
-        [formatName(title), salary, department_id],
-        `${title} added to role table.`,
-        `Unable to add '${title}' department to table.`
-    )
+// Add values to specified table
+// success and error logging.
+const addToTable = async (table, values) => {
+    let sql, logSuccess, logError;
+
+    switch (table) {
+        case 'department':
+            sql = 'INSERT INTO `department` (name) VALUES (?);';
+            logSuccess = `New added to department table.`;
+            logError = `Unable to add new department to table.`;
+            break;
+        case 'role':
+            sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
+            logSuccess = `New role added to table.`;
+            logError = `Unable to add new role to table.`;
+            break;
+        case 'employee':
+            sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
+            logSuccess = `Person added to employee table.`;
+            logError = `Unable to add new employee.`;
+            break;
+        default:
+            return `Invalid table: ${table}`
+    }
+
+    sqlFunction(sql, values, logSuccess, logError)
         .catch(error => {
             if (error.code === 'ER_DUP_ENTRY') {
-                console.warn(`${title} is already a role in your selected department. Try a again, or try a new role.`);
-            }
-            else {
-                console.error(`${error}`);
+                return `Entry is already in ${table}. Try a again.`;
+            } else {
+                return eMessage + error;
             }
         });
 }
-// Add employee to employee table
+const addDepartment = (name) => {
+    if (!name) { return 'No department name passed.'; }
+    let values = [formatName(name)]
+    return addToTable('department', values)
+}
+const addRole = (title, salary, department_id) => {
+    if (!title) { return 'No role title passed.'; }
+    let values = [formatName(title), salary, department_id];
+    return addToTable('role', values);
+}
 const addEmployee = (first_name, last_name, role_id, manager) => {
     let manager_id = manager === '' ? null : manager;
-    let sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
-    sqlFunction(
-        sql,
-        [formatName(first_name), formatName(last_name), role_id, manager_id],
-        `${first_name} ${last_name} added to employee table.`,
-        `Unable to update employee.`
-    );
+    let values = [formatName(first_name), formatName(last_name), role_id, manager_id]
+    return addToTable('employee', values);
 }
 // Update role of employee.
 const updateEmployeeRole = (employee_id, role_id) => {
