@@ -24,7 +24,7 @@ const getListWithIDs = async (table, tableMap, nullMessage) => {
     if (!staff.length) {
         return [{ name: nullMessage, value: -1 }];
     }
-    return items.map(tableMap);
+    return staff.map(tableMap);
 };
 
 const getDepartmentsList = () => {
