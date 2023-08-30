@@ -3,7 +3,7 @@ const { printTable } = require('console-table-printer')
 const colors = require('colors')
 
 const config = require('../config/config.json')
-const questions = require('./questions').questions;
+const questions = require('./questions');
 const actions = require('./actions');
 
 colors.enable()
@@ -17,9 +17,13 @@ function displayLogo() {
 // Init function, starts inquirer question prompt.
 async function init() {
     return await inquirer
-        .prompt(questions)
+        .prompt(questions.menu)
         .then(async (answers) => {
             config.logging.enabled ? console.log(answers) : '';
+            if (answers.options === 'Quit') {
+                console.log('User has requested to quit application.'.blue);
+                return process.exit()
+            }
             // Actions Switch
             switch (answers.action) {
                 case 'viewDepartments':
@@ -67,26 +71,45 @@ async function init() {
                     printTable(employeesTable)
                     break;
                 case 'addDepartment':
-                    actions.addDepartment(answers.departmentName);
+                    await inquirer
+                        .prompt(questions.addDepartment)
+                        .then((department) => {
+                            actions.addDepartment(department.departmentName);
+                        });
                     break;
                 case 'addRole':
-                    let salary = parseFloat(answers.salary).toFixed(2);
-                    let department_id = parseInt(answers.department_id);
-                    actions.addRole(answers.roleName, salary, department_id);
+                    await inquirer
+                        .prompt(questions.addRole)
+                        .then((role) => {
+                            let salary = parseFloat(role.salary).toFixed(2);
+                            let department_id = parseInt(role.department_id);
+                            actions.addRole(role.roleName, salary, department_id);
+                        });
                     break;
                 case 'addEmployee':
-                    actions.addEmployee(answers.first_name, answers.last_name, answers.role_id, answers.manager_id);
+                    await inquirer
+                        .prompt(questions.addEmployee)
+                        .then((employee) => {
+                            actions.addEmployee(employee.first_name, employee.last_name, employee.role_id, employee.manager_id);
+                        });
                     break;
                 case 'updateRole':
-                    actions.updateEmployeeRole(answers.employee_id, answers.role_id);
+                    await inquirer
+                        .prompt(questions.updateRole)
+                        .then((role) => {
+                            actions.updateEmployeeRole(role.employee_id, role.role_id);
+                        });
                     break;
                 case 'updateManager':
-                    console.log(actions);
-                    actions.updateEmployeeManager(answers.employee_id, answers.manager_id);
+                    await inquirer
+                        .prompt(questions.updateManager)
+                        .then((employee) => {
+                            actions.updateEmployeeManager(employee.employee_id, employee.manager_id);
+                        });
                     break;
-                case 'quit':
-                    console.log('User has requested to quit application.'.blue);
-                    return process.exit()
+                case 'goBack':
+                    config.logging.enabled ? console.log('Going Back') : '';
+                    break;
                 default:
                     throw new Error(`${answers.action} has not been accounted for, submit an issue on GitHub`)
             }

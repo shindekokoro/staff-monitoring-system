@@ -26,22 +26,18 @@ const getListWithIDs = async (table, tableMap, nullMessage) => {
     }
     return staff.map(tableMap);
 };
-
 const getDepartmentsList = () => {
     const tableMap = department => ({ name: department.name, value: department.id });
     return getListWithIDs('department', tableMap, 'No departments, add one first.');
 };
-
 const getRolesList = () => {
     const tableMap = role => ({ name: role.title, value: role.id });
     return getListWithIDs('role', tableMap, 'No department roles, add some.');
 };
-
 const getEmployeesList = () => {
     const tableMap = employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id });
     return getListWithIDs('employee', tableMap, 'No employees found, add some');
 };
-
 const getManagerList = async () => {
     const managerList = await getEmployeesList();
     managerList.push({ name: 'No Manager', value: null });
@@ -121,4 +117,9 @@ const updateEmployeeManager = (employee_id, manager_id) => {
     );
 }
 
-module.exports = { viewTable, getDepartmentsList, getRolesList, getEmployeesList, getManagerList, addDepartment, addRole, addEmployee, updateEmployeeRole, updateEmployeeManager }
+module.exports = {
+    viewTable,
+    getDepartmentsList, getRolesList, getEmployeesList, getManagerList,
+    addDepartment, addRole, addEmployee,
+    updateEmployeeRole, updateEmployeeManager
+}

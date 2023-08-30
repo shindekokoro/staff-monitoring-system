@@ -26,114 +26,176 @@ const validateSalary = (input) => {
     let isValid = salary !== 'NaN'
     return isValid || 'Make sure to enter in a number.'
 }
+
 // Questions for Inquirer
-const questions = [
+const menu = [
     {
         type: 'list',
+        name: 'option',
+        message: 'What would you like do to?',
+        choices: ['View', 'Add', 'Update', 'Delete', 'Quit']
+    },
+    {
+        when: (answer) => answer.option === 'View',
+        type: 'list',
         name: 'action',
-        message: 'What would you like to do?',
+        message: 'What would you like to view?',
         choices: [
             { name: 'View All Departments', value: 'viewDepartments' },
             { name: 'View All Roles', value: 'viewRoles' },
             { name: 'View All Employees', value: 'viewEmployees' },
+            { name: 'View Employees by Manager', value: 'viewEmployeeManager' },
+            { name: 'View Employees by Department', value: 'viewEmployeeDepartment' },
+            { name: 'View Department Budget', value: 'viewBudget' },
+            { name: 'Go Back', value: 'goBack' }
+        ]
+    },
+    {
+        when: (answer) => answer.option === 'Add',
+        type: 'list',
+        name: 'action',
+        message: 'What would you like to add?',
+        choices: [
             { name: 'Add a Department', value: 'addDepartment' },
             { name: 'Add a Role', value: 'addRole' },
             { name: 'Add an Employee', value: 'addEmployee' },
+            { name: 'Go Back', value: 'goBack' }
+        ]
+    },
+    {
+        when: (answer) => answer.option === 'Update',
+        type: 'list',
+        name: 'action',
+        message: 'What would you like to update?',
+        choices: [
             { name: 'Update an Employee Role', value: 'updateRole' },
             { name: 'Update an Employee Manager', value: 'updateManager' },
-            { name: 'Quit', value: 'quit' }
-        ],
-
+            { name: 'Go Back', value: 'goBack' }
+        ]
     },
-    // Add Department
     {
-        when: (answer) => answer.action === 'addDepartment',
+        when: (answer) => answer.option === 'Delete',
+        type: 'list',
+        name: 'action',
+        message: 'What would you like to delete?',
+        choices: [
+            { name: 'Delete a Department', value: 'deleteDepartment' },
+            { name: 'Delete a Role', value: 'deleteRole' },
+            { name: 'Delete an Employee', value: 'deleteEmployee' },
+            { name: 'Go Back', value: 'goBack' }
+        ]
+    }
+]
+const addDepartment = [
+    {
         type: 'input',
         name: 'departmentName',
         message: 'What is the name of the department?',
         validate: validateDepartment
-    },
-    // Add Role
+    }
+]
+const addRole = [
     {
-        when: (answer) => answer.action === 'addRole',
         type: 'input',
         name: 'roleName',
         message: 'What is the name of the role?',
         validate: validateEntry
     },
     {
-        when: (answer) => answer.action === 'addRole',
         type: 'input',
         name: 'salary',
         message: 'What is the role\'s salary?',
         validate: validateSalary
     },
     {
-        when: (answer) => answer.action === 'addRole',
         type: 'list',
         name: 'department_id',
         message: (answer) => `What department is ${answer.roleName} in?`,
         choices: actions.getDepartmentsList
-    },
-    // Add Employee
+    }
+]
+const addEmployee = [
     {
-        when: (answer) => answer.action === 'addEmployee',
         type: 'input',
         name: 'first_name',
         message: `What is the employee's first name?`,
         validate: validateEntry
     },
     {
-        when: (answer) => answer.action === 'addEmployee',
         type: 'input',
         name: 'last_name',
         message: (answer) => `What is ${answer.first_name}'s surname?`,
         validate: validateEntry
     },
     {
-        when: (answer) => answer.action === 'addEmployee',
         type: 'list',
         name: 'role_id',
         message: (answer) => `What is ${answer.first_name} ${answer.last_name}'s role?`,
         choices: actions.getRolesList
     },
     {
-        when: (answer) => answer.action === 'addEmployee',
         type: 'list',
         name: 'manager_id',
         message: `What is their manager's name?`,
         choices: actions.getManagerList
-    },
-    // Update Role
+    }
+]
+const updateRole = [
     {
-        when: (answer) => answer.action === 'updateRole',
         type: 'list',
         name: 'employee_id',
         message: 'Choose from the list to select an employee to update their role:',
         choices: actions.getEmployeesList
     },
     {
-        when: (answer) => answer.action === 'updateRole',
         type: 'list',
         name: 'role_id',
         message: 'Choose from the list to select an updated role:',
         choices: actions.getRolesList
-    },
-    // Update Manager
+    }
+]
+const updateManager = [
     {
-        when: (answer) => answer.action === 'updateManager',
         type: 'list',
         name: 'employee_id',
         message: 'Choose from the list to select an employee to update their role:',
         choices: actions.getEmployeesList
     },
     {
-        when: (answer) => answer.action === 'updateManager',
         type: 'list',
         name: 'manager_id',
         message: 'Choose from the list to select an updated role:',
         choices: actions.getManagerList
     }
 ]
+const viewEmployeeManager = [
+    {
 
-module.exports = { questions }
+    }
+]
+const viewEmployeeDepartment = [
+    {
+
+    }
+]
+// Delete Departments/Roles/Employees
+const deleteEntry = [
+    {
+
+    }
+]
+// View Budget (total salaries)
+const viewBudget = [
+    {
+
+    }
+]
+
+module.exports = {
+    menu,
+    // viewDepartment, viewRole, viewEmployee, // (There are no needed sub questions, nothing to export)
+    addDepartment, addRole, addEmployee,
+    updateRole, updateManager,
+    viewEmployeeManager, viewEmployeeDepartment,
+    deleteEntry, viewBudget
+}
