@@ -1,3 +1,4 @@
+const inquirer = require('inquirer');
 const actions = require('./actions');
 
 // Validate Entry, ensure that text has been entered as to not have a null entry.
@@ -27,7 +28,7 @@ const validateSalary = (input) => {
     return isValid || 'Make sure to enter in a number.'
 }
 
-// Questions for Inquirer
+// Questions for inquirer
 const menu = [
     {
         type: 'list',
@@ -41,12 +42,12 @@ const menu = [
         name: 'action',
         message: 'What would you like to view?',
         choices: [
-            { name: 'View All Departments', value: 'viewDepartments' },
-            { name: 'View All Roles', value: 'viewRoles' },
-            { name: 'View All Employees', value: 'viewEmployees' },
-            { name: 'View Employees by Manager', value: 'viewEmployeeManager' },
-            { name: 'View Employees by Department', value: 'viewEmployeeDepartment' },
-            { name: 'View Department Budget', value: 'viewBudget' },
+            { name: 'View All Departments', value: 'departments' },
+            { name: 'View All Roles', value: 'roles' },
+            { name: 'View All Employees', value: 'employees' },
+            { name: 'View Employees by Manager', value: 'employeeManager' },
+            { name: 'View Employees by Department', value: 'employeeDepartment' },
+            { name: 'View Department Budget', value: 'budget' },
             { name: 'Go Back', value: 'goBack' }
         ]
     },
@@ -56,9 +57,9 @@ const menu = [
         name: 'action',
         message: 'What would you like to add?',
         choices: [
-            { name: 'Add a Department', value: 'addDepartment' },
-            { name: 'Add a Role', value: 'addRole' },
-            { name: 'Add an Employee', value: 'addEmployee' },
+            { name: 'Add a Department', value: 'department' },
+            { name: 'Add a Role', value: 'role' },
+            { name: 'Add an Employee', value: 'employee' },
             { name: 'Go Back', value: 'goBack' }
         ]
     },
@@ -68,8 +69,8 @@ const menu = [
         name: 'action',
         message: 'What would you like to update?',
         choices: [
-            { name: 'Update an Employee Role', value: 'updateRole' },
-            { name: 'Update an Employee Manager', value: 'updateManager' },
+            { name: 'Update an Employee Role', value: 'role' },
+            { name: 'Update an Employee Manager', value: 'manager' },
             { name: 'Go Back', value: 'goBack' }
         ]
     },
@@ -79,9 +80,9 @@ const menu = [
         name: 'action',
         message: 'What would you like to delete?',
         choices: [
-            { name: 'Delete a Department', value: 'deleteDepartment' },
-            { name: 'Delete a Role', value: 'deleteRole' },
-            { name: 'Delete an Employee', value: 'deleteEmployee' },
+            { name: 'Delete a Department', value: 'department' },
+            { name: 'Delete a Role', value: 'role' },
+            { name: 'Delete an Employee', value: 'employee' },
             { name: 'Go Back', value: 'goBack' }
         ]
     }
@@ -192,7 +193,7 @@ const viewBudget = [
 ]
 
 module.exports = {
-    menu,
+    inquirer, menu,
     // viewDepartment, viewRole, viewEmployee, // (There are no needed sub questions, nothing to export)
     addDepartment, addRole, addEmployee,
     updateRole, updateManager,
