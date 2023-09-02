@@ -24,6 +24,9 @@ const departmentMap = (department) => {
 const viewDepartments = async () => {
     let departments = await getTable('department');
     let departmentsTable = departments.map(departmentMap);
+    if (!departmentsTable.length) {
+        departmentsTable = [{ 'No Department': 'Add some first' }];
+    }
     return printTable(departmentsTable);
 }
 const roleMap = (role, roleDepartments) => {
@@ -39,6 +42,9 @@ const viewRoles = async () => {
     let roles = await getTable('role');
     let roleDepartments = await getTable('department');
     let rolesTable = roles.map(role => roleMap(role, roleDepartments));
+    if (!rolesTable.length) {
+        rolesTable = [{ 'No Roles': 'Add some first' }];
+    }
     return printTable(rolesTable);
 }
 const employeeMap = (employee, employeesList, employeeRoles) => {
@@ -60,15 +66,21 @@ const viewEmployees = async () => {
     let employeesList = await getTable('employee');
     let employeeRoles = await getTable('role');
     let employeesTable = employeesList.map((employee) => employeeMap(employee, employeesList, employeeRoles));
+    if (!employeesTable.length) {
+        employeesTable = [{ 'No Employees': 'Add some first' }];
+    }
     return printTable(employeesTable)
 }
 const viewEmployeeByManager = async (manager_id) => {
-    let employeesList = await getTable('employee', 'manager_id', manager_id);
+    let employeesList = await getTable('employee', 'manager_id', manager_id).catch();
     let employeeRoles = await getTable('role');
-    if (!employeesList || employeesList.length < 1) {
-        return console.log('Manager has no subordinates.');
+    if (!employeesList || !employeesList.length) {
+        return printTable([{ 'No Employees': 'Manager has no subordinates.' }]);
     }
     let employeesTable = employeesList.map(employee => employeeMap(employee, employeesList, employeeRoles));
+    if (!employeesTable.length) {
+        employeesTable = [{ 'No Employees': 'Add some first' }];
+    }
     return printTable(employeesTable);
 }
 const viewEmployeeByDepartment = async (department_id) => {
@@ -81,17 +93,21 @@ const viewEmployeeByDepartment = async (department_id) => {
         }
     });
     let employeesTable = departmentEmployees.map(employee => employeeMap(employee, departmentEmployees, departmentRoles));
+    if (!employeesTable.length) {
+        employeesTable = [{ 'No Departments': 'Add some first' }];
+    }
     return printTable(employeesTable);
 }
 
 const viewDepartmentBudget = async (department_id) => {
     let departmentRoles = await getTable('role', 'department_id', department_id);
+    if (!departmentRoles.length) {
+        return printTable([{ 'No Roles': 'Add some first' }]);
+    }
+
     let totalDepartmentSalary = await departmentRoles.reduce((total, role) => parseFloat(total.salary) + parseFloat(role.salary));
-    let weeklyHours = 40;
-    let totalWeeks = 52;
-    totalDepartmentSalary = totalDepartmentSalary * weeklyHours * totalWeeks;
     totalDepartmentSalary = totalDepartmentSalary.toLocaleString(undefined, { style: "currency", currency: "USD" });
-    console.log(`The Total Utilized Yearly Budget For Department Is:\n${totalDepartmentSalary}`.blue);
+    return printTable([{ 'The Total Utilized Yearly Budget For Department Is': totalDepartmentSalary }]);
 }
 
 const view = async (questions, answers) => {

@@ -17,11 +17,11 @@ const getDepartmentsList = () => {
 };
 const getRolesList = () => {
     const tableMap = role => ({ name: role.title, value: role.id });
-    return getListWithIDs('role', tableMap, 'No department roles, add some.');
+    return getListWithIDs('role', tableMap, 'No department roles, add some first.');
 };
 const getEmployeesList = () => {
     const tableMap = employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id });
-    return getListWithIDs('employee', tableMap, 'No employees found, add some');
+    return getListWithIDs('employee', tableMap, 'No employees found, add some first.');
 };
 const getManagerList = async () => {
     const managerList = await getEmployeesList();

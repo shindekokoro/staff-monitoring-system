@@ -16,7 +16,7 @@ const add = async (questions, answers) => {
             return await questions.inquirer
                 .prompt(questions.addDepartment)
                 .then((department) => {
-                    addDepartment(department.departmentName);
+                    return addDepartment(department.departmentName);
                 });
         case 'role':
             return await questions.inquirer
@@ -24,13 +24,19 @@ const add = async (questions, answers) => {
                 .then((role) => {
                     let salary = parseFloat(role.salary).toFixed(2);
                     let department_id = parseInt(role.department_id);
-                    addRole(role.roleName, salary, department_id);
+                    // If salary less than $1000 assume that number entered is hourly rate and convert to a yearly salary
+                    if (salary < 1000) {
+                        let weeklyHours = 40;
+                        let totalWeeks = 52;
+                        salary = salary * weeklyHours * totalWeeks;
+                    }
+                    return addRole(role.roleName, salary, department_id);
                 });
         case 'employee':
             return await questions.inquirer
                 .prompt(questions.addEmployee)
                 .then((employee) => {
-                    addEmployee(employee.first_name, employee.last_name, employee.role_id, employee.manager_id);
+                    return addEmployee(employee.first_name, employee.last_name, employee.role_id, employee.manager_id);
                 });
         case 'goBack':
             return console.log('Going Back');
