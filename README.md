@@ -8,6 +8,7 @@ Staff Monitoring System (S.M.S.) Is an application to help companies manage empl
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
+- [ToDO](#todo)
 - [License](#license)
 - [Tests](#tests)
 - [Questions](#questions)
@@ -21,10 +22,10 @@ Type in terminal:
 
 ## Usage
 1. Make any changes to config.json as needed
-2. Install pm2 server to ensure daemonization of app to keep alive. Use the command below if you don't have pm2 installed.
-   - `npm install pm2 -g`
-3. `pm2 start server.js --name sms`
-4. `pm2 stop sms` to stop
+2. `node modules/index.js`
+
+## ToDO
+- Create server for front end, not currently need. Application works as requested for now.
 
 ## License
 [MIT](http://choosealicense.com/licenses/mit/)
