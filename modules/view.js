@@ -79,7 +79,7 @@ const viewEmployeeByManager = async (manager_id) => {
     let employeesList = await getTable('employee', 'manager_id', manager_id).catch();
     let employeeRoles = await getTable('role');
     if (!employeesList || !employeesList.length) {
-        return printTable([{ 'No Employees': 'Manager has no subordinates.' }]);
+        return printTable([{ 'No Employees': 'Employee has no subordinates' }]);
     }
     let employeesTable = employeesList.map(employee => employeeMap(employee, employeesList, employeeRoles));
     if (!employeesTable.length) {
