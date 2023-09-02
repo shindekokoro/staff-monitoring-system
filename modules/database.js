@@ -28,7 +28,7 @@ const sqlFunction = async (sql, values, logSuccess, logError) => {
         smsDB.query(sql, values, function (error, result, fields) {
             if (error) {
                 console.error(`\n${logError}`.red);
-                reject(error)
+                return reject(error)
             }
             config.logging.enabled ? console.log(logSuccess) : '';
             return resolve(result)
