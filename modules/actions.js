@@ -25,8 +25,12 @@ const getEmployeesList = () => {
 };
 const getManagerList = async () => {
     const managerList = await getEmployeesList();
-    managerList.push({ name: 'No Manager', value: null });
-    return managerList;
+    if (managerList[0].value === -1) {
+        return [{ name: 'No Manager', value: null }];
+    } else {
+        managerList.push({ name: 'No Manager', value: null });
+        return managerList;
+    }
 };
 const deleteDepartmentsList = async () => {
     const deleteList = await getDepartmentsList();
