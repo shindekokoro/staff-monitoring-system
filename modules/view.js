@@ -3,9 +3,13 @@ const { printTable } = require('console-table-printer');
 
 // View specified table and if there is an ID the specific entry.
 const getTable = (table, column, id) => {
-    let where;
+    let where = '';
     if (column) {
-        where = `WHERE \`${column}\` = ?`
+        let equal = '= ?';
+        if (id === null) {
+            equal = 'IS NULL'
+        }
+        where = `WHERE \`${column}\` ${equal}`
     }
     let sql = `SELECT * FROM \`${table}\` ${where}`;
     return sqlFunction(
@@ -83,7 +87,7 @@ const viewEmployeeByManager = async (manager_id) => {
     }
     return printTable(employeesTable);
 }
-const viewEmployeeByDepartment = async (department_id) => {
+const filterByDepartment = async (department_id) => {
     let employeesList = await getTable('employee',);
     let departmentRoles = await getTable('role', 'department_id', department_id);
     let roleIDs = departmentRoles.map(department => department.id);
@@ -92,6 +96,11 @@ const viewEmployeeByDepartment = async (department_id) => {
             return employee;
         }
     });
+    return departmentEmployees;
+}
+const viewEmployeeByDepartment = async (department_id) => {
+    let departmentRoles = await getTable('role', 'department_id', department_id);
+    let departmentEmployees = await filterByDepartment(department_id);
     let employeesTable = departmentEmployees.map(employee => employeeMap(employee, departmentEmployees, departmentRoles));
     if (!employeesTable.length) {
         employeesTable = [{ 'No Departments': 'Add some first' }];
@@ -101,12 +110,22 @@ const viewEmployeeByDepartment = async (department_id) => {
 
 const viewDepartmentBudget = async (department_id) => {
     let departmentRoles = await getTable('role', 'department_id', department_id);
-    if (!departmentRoles.length) {
-        return printTable([{ 'No Roles': 'Add some first' }]);
+    let employeesList = await filterByDepartment(department_id);
+    let total = 0;
+    departmentRoles.forEach(role => {
+        employeesList.forEach(employee => {
+            if (role.id === employee.role_id) {
+                total += parseFloat(role.salary);
+            }
+        })
+    })
+
+    if (!employeesList.length) {
+        return printTable([{ 'No Employees': 'Add some to department roles first' }]);
     }
 
-    let totalDepartmentSalary = await departmentRoles.reduce((total, role) => parseFloat(total.salary) + parseFloat(role.salary));
-    totalDepartmentSalary = totalDepartmentSalary.toLocaleString(undefined, { style: "currency", currency: "USD" });
+    let totalDepartmentSalary = total.toLocaleString(undefined, { style: "currency", currency: "USD" });
+
     return printTable([{ 'The Total Utilized Yearly Budget For Department Is': totalDepartmentSalary }]);
 }
 
@@ -133,7 +152,7 @@ const view = async (questions, answers) => {
                 });
         case 'budget':
             return await questions.inquirer
-                .prompt(questions.viewEmployeeDepartment)
+                .prompt(questions.viewBudget)
                 .then(async (answer) => {
                     return await viewDepartmentBudget(answer.department_id);
                 });
