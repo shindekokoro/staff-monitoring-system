@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `role`(
     `salary` DECIMAL(13, 2),
     `department_id` INT,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`department_id`) REFERENCES `department`(`id`),
+    FOREIGN KEY (`department_id`) REFERENCES `department`(`id`) ON DELETE CASCADE,
     UNIQUE KEY `title_department` (`title`, `department_id`)
 );
 CREATE TABLE IF NOT EXISTS `employee`(
@@ -19,6 +19,6 @@ CREATE TABLE IF NOT EXISTS `employee`(
     `role_id` INT REFERENCES `role`(`id`),
     `manager_id` INT DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`role_id`) REFERENCES `role`(`id`),
+    FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`manager_id`) REFERENCES `employee`(`id`)
 );
