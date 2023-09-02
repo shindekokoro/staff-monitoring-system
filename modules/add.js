@@ -33,9 +33,9 @@ const add = async (questions, answers) => {
                     addEmployee(employee.first_name, employee.last_name, employee.role_id, employee.manager_id);
                 });
         case 'goBack':
-            return config.logging.enabled ? console.log('Going Back') : '';
+            return console.log('Going Back');
         default:
-            throw new Error(`${answers.action} has not been accounted for, submit an issue on GitHub`)
+            throw new Error(`${answers.action} has not been accounted for, submit an issue on GitHub`);
     }
 }
 
@@ -47,7 +47,7 @@ const addToTable = async (table, values) => {
     switch (table) {
         case 'department':
             sql = 'INSERT INTO `department` (name) VALUES (?);';
-            logSuccess = `New added to department table.`;
+            logSuccess = `New department added to table.`;
             logError = `Unable to add new department to table.`;
             break;
         case 'role':
@@ -64,12 +64,12 @@ const addToTable = async (table, values) => {
             return `Invalid table: ${table}`
     }
 
-    sqlFunction(sql, values, logSuccess, logError)
+    return await sqlFunction(sql, values, logSuccess, logError)
         .catch(error => {
             if (error.code === 'ER_DUP_ENTRY') {
                 return `Entry is already in ${table}. Try a again.`;
             } else {
-                return eMessage + error;
+                return logError + error;
             }
         });
 }
