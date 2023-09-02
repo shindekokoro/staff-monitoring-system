@@ -171,24 +171,73 @@ const updateManager = [
 ]
 const viewEmployeeManager = [
     {
-
+        type: 'list',
+        name: 'manager_id',
+        message: 'What manager does the employees report to?',
+        choices: actions.getManagerList
     }
 ]
 const viewEmployeeDepartment = [
     {
-
+        type: 'list',
+        name: 'department_id',
+        message: 'What department are the employees in?',
+        choices: actions.getDepartmentsList
     }
 ]
 // Delete Departments/Roles/Employees
-const deleteEntry = [
+const deleteDepartment = [
     {
-
+        type: 'list',
+        name: 'department_id',
+        message: 'What department would you like to delete?',
+        choices: actions.deleteDepartmentsList
+    },
+    {
+        when: (answer) => answer.value > 0,
+        type: 'confirm',
+        name: 'confirmDelete',
+        message: 'This will also DELETE all `roles` and `employees` in this department,\n  are you sure you want to delete?'.yellow,
+        default: false
+    }
+]
+const deleteRole = [
+    {
+        type: 'list',
+        name: 'role_id',
+        message: 'What role would you like to delete?',
+        choices: actions.deleteRolesList
+    },
+    {
+        when: (answer) => answer.value > 0,
+        type: 'confirm',
+        name: 'confirmDelete',
+        message: 'This will also DELETE all `employees` in this role,\n  are you sure you want to delete?'.yellow,
+        default: false
+    }
+]
+const deleteEmployee = [
+    {
+        type: 'list',
+        name: 'employee_id',
+        message: 'Which employee would you like to delete?',
+        choices: actions.deleteEmployeesList
+    },
+    {
+        when: (answer) => answer.value > 0,
+        type: 'confirm',
+        name: 'confirmDelete',
+        message: 'Are you sure you want to delete the selected employee?'.yellow,
+        default: false
     }
 ]
 // View Budget (total salaries)
 const viewBudget = [
     {
-
+        type: 'list',
+        name: 'department_id',
+        message: 'Which department budget would you like to view?',
+        choices: actions.getDepartmentsList
     }
 ]
 
@@ -198,5 +247,6 @@ module.exports = {
     addDepartment, addRole, addEmployee,
     updateRole, updateManager,
     viewEmployeeManager, viewEmployeeDepartment,
-    deleteEntry, viewBudget
+    deleteDepartment, deleteRole, deleteEmployee,
+    viewBudget
 }
