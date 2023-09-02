@@ -194,7 +194,7 @@ const deleteDepartment = [
         choices: actions.deleteDepartmentsList
     },
     {
-        when: (answer) => answer.value > 0,
+        when: (answer) => answer.department_id > 0,
         type: 'confirm',
         name: 'confirmDelete',
         message: 'This will also DELETE all `roles` and `employees` in this department,\n  are you sure you want to delete?'.yellow,
@@ -209,7 +209,7 @@ const deleteRole = [
         choices: actions.deleteRolesList
     },
     {
-        when: (answer) => answer.value > 0,
+        when: (answer) => answer.role_id > 0,
         type: 'confirm',
         name: 'confirmDelete',
         message: 'This will also DELETE all `employees` in this role,\n  are you sure you want to delete?'.yellow,
@@ -224,7 +224,7 @@ const deleteEmployee = [
         choices: actions.deleteEmployeesList
     },
     {
-        when: (answer) => answer.value > 0,
+        when: (answer) => answer.employee_id > 0,
         type: 'confirm',
         name: 'confirmDelete',
         message: 'Are you sure you want to delete the selected employee?'.yellow,

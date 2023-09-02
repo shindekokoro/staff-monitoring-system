@@ -33,7 +33,7 @@ const remove = async (questions, answers) => {
                 .prompt(questions.deleteEmployee)
                 .then((answer) => {
                     if (!answer.confirmDelete) { return console.log('  Did not delete employee'.blue); }
-                    let employee_id = answer.id
+                    let employee_id = answer.employee_id
                     return removeFromTable(table, 'id', employee_id)
                 });
         case 'goBack':
