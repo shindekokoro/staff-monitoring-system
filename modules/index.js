@@ -46,7 +46,7 @@ async function init() {
             if (error.isTtyError) {
                 console.error('Prompt cannot be rendered in the current environment.'.red);
             } else {
-                console.error('Something went wrong %s'.red, error);
+                console.error('Something went wrong: %s'.red, error);
             }
             // Re-Initiate App for graceful error
             return await init();

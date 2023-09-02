@@ -27,6 +27,10 @@ const sqlFunction = async (sql, values, logSuccess, logError) => {
         config.logging.enabled ? console.log('The values are: ' + values) : '';
         smsDB.query(sql, values, function (error, result, fields) {
             if (error) {
+                if (error.code === 'ER_NO_SUCH_TABLE') {
+                    startDB()
+                    return reject('Selected table doesn\'t exist. (re)Creating tables if they don\'t exist.'.yellow);
+                }
                 console.error(`\n${logError}`.red);
                 return reject(error)
             }
