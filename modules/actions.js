@@ -1,7 +1,7 @@
 const { view, getTable } = require('./view');
 const { add, addDepartment, addRole, addEmployee } = require('./add');
 const { update, updateEmployeeRole, updateEmployeeManager } = require('./update');
-// const { remove } = require('./remove ');
+const { remove } = require('./remove');
 
 // Return a list of items and their IDs based on the specified table and table map.
 const getListWithIDs = async (table, tableMap, nullMessage) => {
@@ -28,10 +28,27 @@ const getManagerList = async () => {
     managerList.push({ name: 'No Manager', value: null });
     return managerList;
 };
+const deleteDepartmentsList = async () => {
+    const deleteList = await getDepartmentsList();
+    deleteList.push({ name: 'Cancel', value: -1 });
+    return deleteList;
+};
+const deleteRolesList = async () => {
+    const deleteList = await getRolesList();
+    deleteList.push({ name: 'Cancel', value: -1 });
+    return deleteList;
+};
+const deleteEmployeesList = async () => {
+    const deleteList = await getEmployeesList();
+    deleteList.push({ name: 'Cancel', value: -1 });
+    return deleteList;
+};
 
 module.exports = {
     view, getTable,
     getDepartmentsList, getRolesList, getEmployeesList, getManagerList,
     add, addDepartment, addRole, addEmployee,
-    update, updateEmployeeRole, updateEmployeeManager
+    update, updateEmployeeRole, updateEmployeeManager,
+    deleteDepartmentsList, deleteRolesList, deleteEmployeesList,
+    remove
 }
