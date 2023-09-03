@@ -1,4 +1,6 @@
+const { printTable } = require('console-table-printer');
 const sqlFunction = require('./database').sqlFunction;
+const actions = require('./view')
 
 // Format a string so the first letter of each word is capitalized.
 const formatName = (input) => {
@@ -53,17 +55,23 @@ const addToTable = async (table, values) => {
     switch (table) {
         case 'department':
             sql = 'INSERT INTO `department` (name) VALUES (?);';
-            logSuccess = `New department added to table.`;
+            logSuccess = [{ 'Department': values[0] }]
+            // logSuccess = `New department added to table.`;
             logError = `Unable to add new department to table.`;
             break;
         case 'role':
             sql = 'INSERT INTO `role` (title, salary, department_id) VALUES (?, ?, ?);';
-            logSuccess = `New role added to table.`;
+            let department = await actions.getTable('department', 'id', values[2]);
+            logSuccess = [{ 'Role Title': values[0], 'Salary': values[1], 'Department': department[0].name }]
+            // logSuccess = `New role added to table.`;
             logError = `Unable to add new role to table.`;
             break;
         case 'employee':
-            sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ? ,?);';
-            logSuccess = `Person added to employee table.`;
+            sql = 'INSERT INTO `employee` (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?);';
+            let role = await actions.getTable('role', 'id', values[2]);
+            let manager = values[3] ? await actions.getTable('employee', 'id', values[3]) : [{ first_name: null }];
+            logSuccess = [{ 'First Name': values[0], 'Last Name': values[1], 'Title': role[0].title, 'Manager': `${manager[0].first_name} ${manager[0].last_name}` }];
+            // logSuccess = `Person added to employee table.`;
             logError = `Unable to add new employee.`;
             break;
         default:
@@ -71,6 +79,9 @@ const addToTable = async (table, values) => {
     }
 
     return await sqlFunction(sql, values, logSuccess, logError)
+        .then(() => {
+            return printTable(logSuccess);
+        })
         .catch(error => {
             if (error.code === 'ER_DUP_ENTRY') {
                 return `Entry is already in ${table}. Try a again.`;
