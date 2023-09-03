@@ -24,6 +24,11 @@ Type in terminal:
 1. Make any changes to config.json as needed
 2. `node modules/index.js`
 
+## Preview
+[Video Preview](https://youtu.be/dwEbc95vsWE)
+
+![preview](./preview.png)
+
 ## ToDO
 - Create server for front end, not currently need. Application works as requested for now.
 
