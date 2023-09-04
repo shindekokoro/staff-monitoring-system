@@ -6,13 +6,13 @@ const colors = require('colors');
 colors.enable();
 
 // Display Name of App/LOGO
-function displayLogo() {
+const displayLogo = () => {
 	const appLogo = '              _____ _         __  __               \r\n             / ____| |       / _|/ _|              \r\n            | (___ | |_ __ _| |_| |_               \r\n             \\___ \\| __/ _` |  _|  _|              \r\n             ____) | || (_| | | | |                \r\n  __  __    |_____/ \\__\\__,_|_| |_|  _             \r\n |  \\/  |           (_) |           (_)            \r\n | \\  / | ___  _ __  _| |_ ___  _ __ _ _ __   __ _ \r\n | |\\/| |/ _ \\| \'_ \\| | __/ _ \\| \'__| | \'_ \\ / _` |\r\n | |  | | (_) | | | | | || (_) | |  | | | | | (_| |\r\n |_|  |_|\\___/|_| |_|_|\\__\\___/|_|  |_|_| |_|\\__, |\r\n        / ____|         | |                   __/ |\r\n       | (___  _   _ ___| |_ ___ _ __ ___    |___/ \r\n        \\___ \\| | | / __| __/ _ \\ \'_ ` _ \\         \r\n        ____) | |_| \\__ \\ ||  __/ | | | | |        \r\n       |_____/ \\__, |___/\\__\\___|_| |_| |_|        \r\n                __/ |                              \r\n               |___/\n';
 	console.log(appLogo.green);
-}
+};
 
 // Init function, starts inquirer question prompt.
-async function init() {
+const init = async () => {
 	return await questions.inquirer
 		.prompt(questions.menu)
 		.then(async (answers) => {
@@ -50,6 +50,6 @@ async function init() {
 			// Re-Initiate App for graceful error
 			return await init();
 		});
-}
+};
 displayLogo();
 init();
